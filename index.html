@@ -84,17 +84,19 @@
         h1 {
             font-size: 4rem;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             opacity: 0;
             transform: translateY(30px);
         }
 
         .tagline {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             text-align: center;
             margin-bottom: 3rem;
             opacity: 0;
             transform: translateY(20px);
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0;
         }
 
         .cta-button {
@@ -649,6 +651,10 @@
             .testimonials-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .testimonial-card:nth-child(n+4) {
+                display: none;
+            }
         }
 
         /* Footer Styles */
@@ -728,16 +734,11 @@
 <body>
     <nav class="nav">
         <div class="logo">agentimate</div>
-        <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#about">About</a>
-        </div>
     </nav>
 
     <div class="hero">
         <h1>Idea to design in seconds.</h1>
-        <p class="tagline">Agentimate is your AI agent who animates.</p>
+        <p class="tagline">Agentimate is your AI agent who animates your ideas.</p>
         <a href="#start" class="cta-button">Start Designing</a>
 
         <h2 class="assembly-title">Component Assembly</h2>
@@ -877,18 +878,11 @@
             easing: 'easeOutExpo',
         })
         .add({
-            targets: '.nav-links a',
-            translateY: [20, 0],
-            opacity: [0, 1],
-            delay: anime.stagger(100, {start: 300}),
-            duration: 1200
-        })
-        .add({
             targets: 'h1',
             translateY: [30, 0],
             opacity: [0, 1],
             duration: 1200,
-        }, '-=800')
+        })
         .add({
             targets: '.tagline',
             translateY: [20, 0],
