@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentimate - The agent who animates your ideas</title>
+    <meta property="og:title" content="Agentimate">
+    <meta property="og:description" content="The agent who animates your ideas">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF1B6B;
+            --secondary: #45CAFF;
+            --dark: #0A0A0A;
+            --light: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            overflow-y: auto;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20rem 2rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Remove all shape-related styles */
+        .floating-shapes, .shape, .shape-circle, .shape-rect, .shape-ellipse, 
+        .shape-triangle, .shape-wave, .shape-infinity, .svg-filters {
+            display: none;
+        }
+
+        h1 {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: var(--light);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 20px rgba(255, 27, 107, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 27, 107, 0.5);
+        }
+
+        .animation-showcase {
+            margin-top: 8rem;
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            position: relative;
+            opacity: 0;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 15rem;
+        }
+
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }
+
+        .cursor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+            animation: blink 0.7s step-end infinite;
+        }
+
+        .animation-stage {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-top: 2rem;
+        }
+
+        .dots {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--light);
+        }
+
+        .idea-text {
+            position: absolute;
+            font-size: 1.2rem;
+            color: var(--light);
+            opacity: 0.7;
+            top: 20px;
+            left: 20px;
+        }
+
+        .animation-path {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 2;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        .morphing-shape {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 2;
+            transform-origin: center;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* New Component Assembly Styles */
+        .component-assembly {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            margin: 1rem 0 8rem 0;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .assembly-dot {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 20px rgba(255, 27, 107, 0.3);
+        }
+
+        .website-component {
+            position: absolute;
+            width: var(--component-width, 50%);
+            height: var(--component-height, 400px);
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            opacity: 0;
+            transform: scale(0.8);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            transition: width 0.5s ease;
+        }
+
+        .component-header {
+            position: relative;
+            width: 100%;
+            height: 32px;
+            background: rgba(40, 40, 40, 0.95);
+            border-bottom: 1px solid rgba(255, 27, 107, 0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .traffic-lights {
+            position: absolute;
+            left: 0.8rem;
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .traffic-light.red {
+            background: #FF5F56;
+        }
+
+        .traffic-light.yellow {
+            background: #FFBD2E;
+        }
+
+        .traffic-light.green {
+            background: #27C93F;
+        }
+
+        .header-text {
+            width: 100%;
+            color: var(--light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .content-layout-1 {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            position: relative;
+        }
+
+        .horizontal-section {
+            flex: 1;
+            height: 100%;
+            background: rgba(255, 27, 107, 0.05);
+            border: 1px solid rgba(255, 27, 107, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .horizontal-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 27, 107, 0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { left: 100%; }
+        }
+
+        .content-layout-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            position: relative;
+        }
+
+        .vertical-section {
+            width: 100%;
+            height: 33%;
+            background: rgba(255, 27, 107, 0.05);
+            border: 1px solid rgba(255, 27, 107, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { width: 100%; height: 100%; opacity: 1; }
+            100% { width: 300%; height: 300%; opacity: 0; }
+        }
+
+        .content-layout-3 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            height: 100%;
+            background: rgba(20, 20, 20, 0.95);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animated-shape-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .shape-element {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            animation: rotateShape 8s linear infinite;
+        }
+
+        .shape-element:nth-child(2) {
+            animation-delay: -2s;
+            border-color: var(--secondary);
+        }
+
+        .shape-element:nth-child(3) {
+            animation-delay: -4s;
+            border-color: var(--primary);
+        }
+
+        .shape-core {
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            background: radial-gradient(circle at center, var(--primary) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseCore 2s ease-in-out infinite;
+        }
+
+        .energy-ring {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            border: 4px solid transparent;
+            border-radius: 50%;
+            animation: spinRing 3s linear infinite;
+            border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
+        }
+
+        .particle-burst {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        @keyframes rotateShape {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes pulseCore {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes spinRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes particleBurst {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 27, 107, 0.2) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 27, 107, 0.1) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255, 27, 107, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+        }
+
+        .assembly-title {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+        }
+
+        .section-text:last-child {
+            width: 80%;
+        }
+
+        /* Testimonials Section Styles */
+        .testimonials-section {
+            width: 100%;
+            padding: 2rem 2rem 8rem 2rem;
+            background: var(--dark);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .testimonial-shape {
+            position: absolute;
+            opacity: 0.08;
+            fill: var(--light);
+            stroke: none;
+            transform-origin: center;
+        }
+
+        .testimonial-shape.small {
+            width: 10px;
+            height: 10px;
+        }
+
+        .testimonial-shape.medium {
+            width: 20px;
+            height: 20px;
+        }
+
+        .testimonial-shape.large {
+            width: 30px;
+            height: 30px;
+        }
+
+        .testimonial-shape.outline {
+            fill: none;
+            stroke: var(--light);
+            stroke-width: 1px;
+        }
+
+        .testimonials-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 3rem;
+            color: var(--light);
+            opacity: 0;
+            transform: translateY(20px);
+            font-weight: 500;
+        }
+
+        /* Section Separator */
+        .section-separator {
+            width: 150px;
+            height: 3px;
+            margin: 2rem auto;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.7) 50%, 
+                transparent 100%
+            );
+            position: relative;
+            overflow: visible;
+        }
+
+        .section-separator::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--light);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            height: var(--card-height, auto);
+            max-width: 350px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .testimonial-author {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .testimonial-company {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .animation-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 4rem 0 3rem 0;
+            color: var(--light);
+            opacity: 0;
+            transform: translateY(20px);
+            font-weight: 500;
+        }
+
+        @media (max-width: 1200px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4rem;
+        }
+
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-title {
+            color: var(--light);
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="logo">agentimate</div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#about">About</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Idea to design in seconds.</h1>
+        <p class="tagline">Agentimate is your AI agent who animates.</p>
+        <a href="#start" class="cta-button">Start Designing</a>
+
+        <h2 class="assembly-title">Component Assembly</h2>
+        <div class="component-assembly">
+            <!-- Assembly dots will be added via JavaScript -->
+        </div>
+
+        <div class="section-separator"></div>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section" id="testimonials">
+            <h2 class="testimonials-title">Loved by Design Innovators</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"This AI tool revolutionized my design workflow. The animations it creates are not just beautiful, but they tell a story. It's like having a motion design expert right at your fingertips."</p>
+                    <p class="testimonial-author">Sarah Chen</p>
+                    <p class="testimonial-company">Creative Director - DesignFlow</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The way it understands design principles and translates them into fluid animations is mind-blowing. I've cut my animation production time in half."</p>
+                    <p class="testimonial-author">Marcus Rodriguez</p>
+                    <p class="testimonial-company">UI/UX Lead - InnovateX</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Finally, an AI that speaks the language of design! The animations it creates maintain the emotional impact I want in my designs."</p>
+                    <p class="testimonial-author">Emma Watson</p>
+                    <p class="testimonial-company">Independent Design Consultant</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The animations are incredibly smooth and natural. It's transformed how I approach interactive design, making complex animations accessible and quick to implement."</p>
+                    <p class="testimonial-author">Alex Rivera</p>
+                    <p class="testimonial-company">Senior Designer - MotionLab</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Perfect for rapid prototyping. I can quickly test different animation styles and get client feedback without spending hours on implementation."</p>
+                    <p class="testimonial-author">Nina Patel</p>
+                    <p class="testimonial-company">UX Director - DesignSprint</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The level of control and customization is impressive. It understands subtle design nuances and translates them into precise animations."</p>
+                    <p class="testimonial-author">Thomas Wright</p>
+                    <p class="testimonial-company">Lead Designer - AnimateAI</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Game-changing tool for our design team. We've seen a 70% reduction in animation development time while maintaining top-notch quality."</p>
+                    <p class="testimonial-author">Sophie Chen</p>
+                    <p class="testimonial-company">Product Design Lead - TechFlow</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The AI's understanding of timing and easing is remarkable. It creates animations that feel natural and enhance the user experience."</p>
+                    <p class="testimonial-author">James Wilson</p>
+                    <p class="testimonial-company">Motion Designer - Animate8</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Incredible tool for both simple and complex animations. It's like having an expert motion designer available 24/7."</p>
+                    <p class="testimonial-author">Maria Garcia</p>
+                    <p class="testimonial-company">Design Systems Lead - FlowUI</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <h2 class="animation-title">Edit your Animations Just By Typing.</h2>
+
+        <div class="animation-showcase">
+            <div class="input-container">
+                <input type="text" class="input-field" placeholder="enter animation" spellcheck="false">
+                <div class="cursor"></div>
+            </div>
+            <div class="animation-stage">
+                <!-- Component will be added via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3 class="footer-title">Product</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Features</a>
+                    <a href="#" class="footer-link">Pricing</a>
+                    <a href="#" class="footer-link">Documentation</a>
+                    <a href="#" class="footer-link">Release Notes</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Company</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Careers</a>
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="#" class="footer-link">Press</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Resources</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Community</a>
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Partners</a>
+                    <a href="#" class="footer-link">Status</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Legal</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Security</a>
+                    <a href="#" class="footer-link">Licenses</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Agentimate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Add this at the start of your script section
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        }
+
+        // Main animations
+        anime.timeline({
+            easing: 'easeOutExpo',
+        })
+        .add({
+            targets: '.nav-links a',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            delay: anime.stagger(100, {start: 300}),
+            duration: 1200
+        })
+        .add({
+            targets: 'h1',
+            translateY: [30, 0],
+            opacity: [0, 1],
+            duration: 1200,
+        }, '-=800')
+        .add({
+            targets: '.tagline',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            duration: 1200,
+        }, '-=1000')
+        .add({
+            targets: '.cta-button',
+            scale: [0.9, 1],
+            opacity: [0, 1],
+            duration: 1200,
+        }, '-=1000')
+        .add({
+            targets: '.animation-title',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            duration: 1000,
+        }, '-=500')
+        .add({
+            targets: '.animation-showcase',
+            opacity: [0, 1],
+            duration: 1000,
+        }, '-=500');
+
+        // Component Assembly Animation
+        const assemblyContainer = document.querySelector('.component-assembly');
+        const assemblyFragment = document.createDocumentFragment();
+        const numberOfDots = 40;
+
+        // Create dots
+        for (let i = 0; i < numberOfDots; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('assembly-dot');
+            assemblyFragment.appendChild(dot);
+        }
+
+        // Component layouts
+        const layouts = [
+            // Wide Horizontal Layout
+            {
+                width: '75%',
+                height: '300px',
+                html: `<div class="component-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="header-text">Design 190</div>
+                </div>
+                <div class="content-layout-1">
+                    <div class="horizontal-section"></div>
+                    <div class="horizontal-section"></div>
+                    <div class="horizontal-section"></div>
+                    <div class="grid-overlay"></div>
+                </div>`
+            },
+            // Narrow Vertical Layout
+            {
+                width: '35%',
+                height: '500px',
+                html: `<div class="component-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="header-text">Design 2201</div>
+                </div>
+                <div class="content-layout-2">
+                    <div class="vertical-section">
+                        <div class="pulse-dot"></div>
+                    </div>
+                    <div class="vertical-section">
+                        <div class="pulse-dot"></div>
+                    </div>
+                    <div class="vertical-section">
+                        <div class="pulse-dot"></div>
+                    </div>
+                    <div class="grid-overlay"></div>
+                </div>`
+            },
+            // Medium Square Layout
+            {
+                width: '50%',
+                height: '400px',
+                html: `<div class="component-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="header-text">Design 1071</div>
+                </div>
+                <div class="content-layout-3">
+                    <div class="animated-shape-container">
+                        <div class="glow-effect"></div>
+                        <div class="shape-element"></div>
+                        <div class="shape-element"></div>
+                        <div class="shape-element"></div>
+                        <div class="shape-core"></div>
+                        <div class="energy-ring"></div>
+                        ${Array(12).fill().map(() => '<div class="particle-burst"></div>').join('')}
+                    </div>
+                    <div class="grid-overlay"></div>
+                </div>`
+            }
+        ];
+
+        let currentLayoutIndex = 0;
+
+        // Create website component
+        const websiteComponent = document.createElement('div');
+        websiteComponent.classList.add('website-component');
+        updateComponent(layouts[0]);
+
+        function updateComponent(layout) {
+            websiteComponent.style.setProperty('--component-width', layout.width);
+            websiteComponent.style.setProperty('--component-height', layout.height);
+            websiteComponent.innerHTML = layout.html;
+        }
+
+        assemblyContainer.appendChild(assemblyFragment);
+        assemblyContainer.appendChild(websiteComponent);
+
+        // Animation Timeline
+        const assemblyTimeline = anime.timeline({
+            easing: 'easeOutExpo'
+        });
+
+        // Initial dot spread
+        assemblyTimeline
+        .add({
+            targets: '.assembly-dot',
+            opacity: [0, 0.8],
+            scale: [0, 1],
+            translateX: function() { 
+                return anime.random(-300, 300);
+            },
+            translateY: function() { 
+                return anime.random(-200, 200);
+            },
+            rotate: function() {
+                return anime.random(-360, 360);
+            },
+            delay: anime.stagger(30, {from: 'center'}),
+            duration: 1000
+        })
+        // Converge to center
+        .add({
+            targets: '.assembly-dot',
+            translateX: 0,
+            translateY: 0,
+            scale: 0.5,
+            rotate: 0,
+            duration: 800,
+            delay: anime.stagger(10),
+            easing: 'easeInExpo'
+        })
+        // Flash and transform
+        .add({
+            targets: '.assembly-dot',
+            opacity: 0,
+            scale: 0,
+            duration: 300,
+            delay: anime.stagger(5),
+            complete: function() {
+                // Start website component animation
+                anime({
+                    targets: '.website-component',
+                    opacity: [0, 1],
+                    scale: [0.8, 1],
+                    duration: 1000,
+                    easing: 'easeOutElastic(1, 0.8)'
+                });
+            }
+        });
+
+        // Add particle burst animation
+        function animateParticles() {
+            const particles = document.querySelectorAll('.particle-burst');
+            particles.forEach(particle => {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 100 + Math.random() * 100;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--x', `${x}px`);
+                particle.style.setProperty('--y', `${y}px`);
+                
+                anime({
+                    targets: particle,
+                    opacity: [1, 0],
+                    scale: [1, 0],
+                    translateX: x,
+                    translateY: y,
+                    duration: 1500 + Math.random() * 1000,
+                    easing: 'easeOutExpo',
+                    complete: function() {
+                        particle.style.transform = 'translate(0, 0) scale(1)';
+                        particle.style.opacity = '1';
+                    }
+                });
+            });
+        }
+
+        // Update the interval callback to include particle animation
+        setInterval(() => {
+            anime({
+                targets: '.website-component',
+                opacity: 0,
+                scale: 0.8,
+                duration: 300,
+                easing: 'easeInQuad',
+                complete: function() {
+                    currentLayoutIndex = (currentLayoutIndex + 1) % layouts.length;
+                    updateComponent(layouts[currentLayoutIndex]);
+                    assemblyTimeline.restart();
+                    if (currentLayoutIndex === 2) {
+                        setInterval(animateParticles, 2000);
+                    }
+                }
+            });
+        }, 6000);
+    </script>
+    <script src="animations.js"></script>
+</body>
+</html> 
