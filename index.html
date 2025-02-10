@@ -144,8 +144,22 @@
             border-radius: 50px;
             font-size: 1.2rem;
             color: var(--light);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(20, 20, 20, 0.8);
             backdrop-filter: blur(10px);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Explicitly set colors for dark mode */
+        @media (prefers-color-scheme: dark) {
+            .input-field {
+                background: rgba(20, 20, 20, 0.8);
+                color: var(--light);
+            }
         }
 
         .cursor {
